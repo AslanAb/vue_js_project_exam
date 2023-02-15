@@ -1,5 +1,11 @@
 <script>
-
+export default {
+    data() {
+        return {
+            userId: JSON.parse(localStorage.getItem('user'))
+        }
+    }
+}
 </script>
 
 <template>
@@ -13,7 +19,7 @@
             <button class="buttonMenu buttonStyle" @click="$router.push('/account')">Личный кабинет</button>
         </div>
         <div class="login">
-            <button class="buttonStyle buttonLogin" @click="$router.push('/login')">Войти</button>
+            <button class="buttonStyle buttonLogin" @click="$router.push('/login')" >Войти</button>
             <button class="buttonStyle buttonLogout hide" data-path="login">Выйти</button>
         </div>
     </header>

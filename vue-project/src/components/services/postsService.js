@@ -47,6 +47,23 @@ class PostsService {
                 return data;
             });
     }
+    async likePostFn(postId, userId) {
+        const payload = {
+            postId: postId,
+            userId: userId
+        }
+        return await fetch(`${HOST}/posts/like/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(res => {
+                let data = res.data;
+                return data;
+            });
+    }
 }
 
 export default PostsService

@@ -10,7 +10,8 @@ export default {
             userId: JSON.parse(localStorage.getItem('user')),
             followedPosts: [],
             followedUsersId: [],
-            followedUsersNamesAndSurnames: []
+            followedUsersNamesAndSurnames: [],
+            isLiked: 0
         }
     },
     methods: {
@@ -30,6 +31,7 @@ export default {
         },
         async getFollowedPosts() {
             await postsService.getPosts().then(res => {
+                this.followedPosts = []
                 res.forEach(el => {
                     if (this.followedUsersId.includes(el.author)) {
                         this.followedPosts.push(el)
@@ -42,11 +44,20 @@ export default {
                 return res.name
             })
             return name
+        },
+        async likePost(id) {
+            await postsService.likePostFn(id, this.userId)
+            this.isLiked++
         }
     },
-    created() {
+    mounted() {
         this.getFollowedUsers();
         this.getFollowedPosts();
+    },
+    watch: {
+        isLiked() {
+            this.getFollowedPosts()
+        }
     }
 }
 </script>
@@ -72,7 +83,7 @@ export default {
                     <label class="label" for="${post._id}"></label>
                 </div>
                 <div class="flex sb aiCenter">
-                    <button class="buttonLikePost flex aiCenter sa" onclick="buttonLikePost('${post._id}')">
+                    <button class="buttonLikePost flex aiCenter sa" @click="likePost(post._id)">
                         <img src="http://localhost:8080/static/images/like.png" alt="">
                         Нравится
                         <span class="countOfLikes">{{post.likes.length}}</span>

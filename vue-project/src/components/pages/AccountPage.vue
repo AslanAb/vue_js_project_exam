@@ -23,6 +23,8 @@ export default {
                 title: "",
                 text: ""
             },
+            isUserEdited: 0,
+            isPostEdited: 0
         }
     },
     methods: {
@@ -57,6 +59,7 @@ export default {
                 "email": this.userNewData.email,
             }
             await usersService.saveNewUserData(newUserData, this.userId).then(() => {
+                this.isUserEdited++
                 alert("Изменения внесены!")
             })
                 .catch(() => alert("Ошибка отправки запроса на изменение данных!"))
@@ -81,20 +84,30 @@ export default {
                 "text": this.postNewData.text
             }
             await postsService.saveNewPostData(newPostData, id).then(() => {
+                this.isPostEdited++
                 alert("Изменения внесены!")
             })
                 .catch(() => alert("Ошибка отправки запроса на изменение данных!"))
         },
         deletePost(id) {
             postsService.deletePostbyId(id).then(() => {
+                this.isPostEdited++
                 alert("Пост удален!")
             })
                 .catch(() => alert("Ошибка при удалении поста!"))
         }
     },
-    created() {
+    mounted() {        
         this.getUserPosts()
         this.getCurrentUser()
+    },
+    watch: {
+        isUserEdited() {
+            this.getCurrentUser()
+        },
+        isPostEdited() {
+            this.getUserPosts()
+        }
     }
 }
 
@@ -118,7 +131,6 @@ export default {
                     <span>Email</span>
                     <textarea name="" class="email" cols="30" rows="10" v-model="userNewData.email"></textarea>
                     <button class="newPostData" @click="saveNewUserData">Сохранить</button>
-                    <button onclick="backUser()" class="">Отмена</button>
                 </div>
             </div>
         </div>
@@ -154,7 +166,6 @@ export default {
                     <span>Текст поста</span>
                     <textarea name="" class="newTextArea" cols="30" rows="10" v-model="postNewData.text"></textarea>
                     <button class="newPostData" @click="saveNewPostData(post._id)">Сохранить</button>
-                    <button onclick="back()" class="">Отмена</button>
                 </div>
             </div>
         </div>

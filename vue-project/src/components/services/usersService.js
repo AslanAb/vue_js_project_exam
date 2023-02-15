@@ -47,17 +47,21 @@ class UsersService {
             });
     }
     async followUser(id, userId) {
-        return await fetch(`${HOST}/users/follow/${id}`, {
+        const payload = {
+            localUserId: userId
+        }
+        return await fetch(`${HOST}/users/follow/${id}`, 
+        {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json; charset=UTF-8'
             },
-            body: JSON.stringify(userId),
+            body: JSON.stringify(payload),
         })
             .then(res => {
                 let data = res.data;
                 return data;
-            });
+            })
     }
     async isFollowedUser(id, userId) {
         return await axios.get(`${HOST}/users/followed/${id}/${userId}`)
@@ -67,12 +71,15 @@ class UsersService {
             });
     }
     async unfollowUser(id, userId) {
+        const payload = {
+            localUserId: userId
+        }
         await fetch(`${HOST}/users/unfollow/${id}`, {
             method: "PUT",
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify(userId)
+            body: JSON.stringify(payload)
         })
     }
 }
