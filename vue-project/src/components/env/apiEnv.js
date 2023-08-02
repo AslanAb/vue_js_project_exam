@@ -1,5 +1,5 @@
 const apiEnv = {
-    HOST: 'http://localhost:8080',
+    HOST: 'http://localhost:8090',
 };
 
 export default apiEnv;
